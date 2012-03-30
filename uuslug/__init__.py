@@ -102,7 +102,7 @@ def uuslug(s, entities=True, decimal=True, hexadecimal=True,
                 
             if filter_dict:
                 query = query.filter(**filter_dict)
-            if instance.pk:
+            if instance and instance.pk:
                 query = query.exclude(pk=instance.pk)
             return query
         counter = 1
