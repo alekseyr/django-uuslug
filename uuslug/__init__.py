@@ -18,7 +18,7 @@ __all__ = ['uuslug']
 
 
 def uuslug(s, entities=True, decimal=True, hexadecimal=True,
-   instance=None, slug_field='slug', filter_dict=None):
+   instance=None, klass=None, slug_field='slug', filter_dict=None):
     """This method tries a little harder than django's django.template.defaultfilters.slugify.
 
     Parameters
@@ -93,9 +93,13 @@ def uuslug(s, entities=True, decimal=True, hexadecimal=True,
     s = re.sub('-{2,}', '-', s).strip('-')
 
     slug = s
-    if instance:
+    if instance or klass:
         def get_query():
-            query = instance.__class__.objects.filter(**{slug_field: slug})
+            if klass:
+                query = klass.objects.filter(**{slug_field: slug})
+            else:
+                query = instance.__class__.objects.filter(**{slug_field: slug})
+                
             if filter_dict:
                 query = query.filter(**filter_dict)
             if instance.pk:
